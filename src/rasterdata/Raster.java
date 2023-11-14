@@ -60,4 +60,7 @@ public interface Raster {
     int getColor();
 
     Optional<Integer> getColor(int c, int r);
-}
+
+    void setColor(int c, int r, int color);
+
+    }

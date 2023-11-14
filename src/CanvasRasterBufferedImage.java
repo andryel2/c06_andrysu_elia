@@ -1,6 +1,8 @@
+import fun.Predicate;
 import rasterdata.RasterBufferedImage;
 import rasterize.*;
 import model.Point;
+import rasterize.fill.SeedFill4;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +28,8 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 	private DottedLineRasterizer useckaTeckovana;
 
 	private PolygonRasterizer polygonRasterizer;
+
+	private SeedFill4 seedFill4;
 	private model.Polygon polygon; //pouze ukládat vrcholy, které jsou koncové pro jednotlivé úsečky
 
 
@@ -43,6 +47,7 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 		useckaTeckovana = new DottedLineRasterizer(raster);
 		polygonRasterizer = new PolygonRasterizer(usecka,useckaTeckovana);
 		polygon = new model.Polygon();
+		seedFill4 = new SeedFill4();
 
 
 		panel = new JPanel() {
@@ -146,7 +151,11 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 					x = e.getX(); //bylo už tam
 					y = e.getY();*/
 				} else if (SwingUtilities.isMiddleMouseButton(e)) {
-					//TODO
+					raster.setColor(2,2,0x66FF99);
+					polygon.clear();
+					Point p1 = new Point(e.getX(),e.getY());
+					polygon.add(p1);
+					panel.repaint();
 				} else if (SwingUtilities.isRightMouseButton(e)) {
 					if(polygon.size() == 0){
 					p1 = new Point(e.getX(),e.getY());
@@ -156,9 +165,10 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.isControlDown()) {
+				if(e.isControlDown()){
 					if (SwingUtilities.isLeftMouseButton(e)) {
-						//TODO
+						seedFill4.fill(e.getX(),e.getY(),0x66FF99,0xaaaaaa,raster);
+						panel.repaint();
 					} else if (SwingUtilities.isRightMouseButton(e)) {
 						//TODO
 					}
@@ -173,6 +183,12 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 					polygonRasterizer.rasterize(polygon);
 					panel.repaint();//tady musím celé překreslit
 				}
+				else if(SwingUtilities.isMiddleMouseButton(e)){
+					Point p3 = new Point(e.getX(),e.getY());
+					polygon.add(p3);
+					polygonRasterizer.obdelnik(polygon.get(0),p3,0xff0000);
+					panel.repaint();
+				}
 			}
 		});
 
@@ -183,7 +199,6 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 				if (e.isShiftDown()) {
 					//TODO
 				} else if (SwingUtilities.isLeftMouseButton(e)) {
-					//TODO
 				} else if (SwingUtilities.isRightMouseButton(e)) {
 					clear(0xaaaaaa);
 
@@ -200,7 +215,10 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 					}
 					//panel.repaint();
 				} else if (SwingUtilities.isMiddleMouseButton(e)) {
-					//TODO
+					clear(0xaaaaaa);
+						Point p3 = new Point(e.getX(),e.getY());
+					polygonRasterizer.obdelnik(polygon.get(0),p3,0xff0000);
+					panel.repaint();
 				}
 			}
 		});

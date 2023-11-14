@@ -28,10 +28,17 @@ public class FilledLineRasterizer extends LineRasterizer {
             double k = (y2 - y1) / (x2 - x1);
             double q = y1 - k * x1;
             double y;
-            for (int x = (int) Math.round(x1); x < x2; x++) {
-                y = (k * x + q);
 
-                raster.setPixel(x,(int) y, color);
+            if (x1 == 0 && x2 == 0) {
+                //dodelat asi cyklus podle y protože x se neposouvá
+
+            }
+            else {
+                for (int x = (int) Math.round(x1); x < x2; x++) {
+                    y = (k * x + q);
+
+                    raster.setColor(x, (int) y, color);
+                }
             }
         }
     }

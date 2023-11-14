@@ -38,7 +38,7 @@ public class RasterBufferedImage implements Raster {
     public void setColor(int c, int r, int color){
         if(c< img.getWidth() && r< img.getHeight() && c>=0 && r>=0) {
             img.setRGB(c, r, color);
-        }  //nechce mi jít, nevím proč
+        } //dodelat vyjimku
     }
 
 
