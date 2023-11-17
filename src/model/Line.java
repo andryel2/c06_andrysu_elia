@@ -50,46 +50,38 @@ public class Line {
     //metody pro scan_line
 
     public boolean isHorizontal(){
-        if((getY1() == 0)&&(getY2()==0)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return y1==y2;
+
     }
 
-   /* public Line oriented(){
+    public Line oriented(){
         //musí být orientovaná dolů, vrátím kdyžtak přeorientovaou
-      Line line = new Line();
+        Line line = null;
+        if(y2< y1){
+            line = new Line(x1,x2,y2,y1,getColor());
+        }
+
       return line;
-    }*/
+    }
 
     public boolean hasYIntercept(double y){ //musim přes předpis úsečky
-        final double k = (y2 - y1) / (x2 - x1);
-        final double q = y1 - k * x1;
-        for (int c = (int) x1; c < x2; c++) {
-            int r = (int) (k * c + q);
-            if(r==y){
-                return true;
-            }
+        if(y>= y1 && y< y2 ){
+            return true;
         }
         return false;
     }
-  /*  public double yIntercept(double y){ //musim přes předpis úsečky
+  /*  public double yIntercept(double y) { //musim přes předpis úsečky
         double xIntercept = 0;
         double k = (y2 - y1) / (x2 - x1);
         double q = y1 - k * x1;
         for (int c = (int) x1; c < x2; c++) {
             int r = (int) (k * c + q);
-            if(r==y){
-                xIntercept = c;
+            if (r == y) {
+                xIntercept = c;   //pouzit while cyklus stene budu hledat pouze jeden průsečík
                 return xIntercept;
             }
         }
-        //navratova hodnota
-    }*/
-
-    //metody pro ořezávání
+    }  */  //metody pro ořezávání
 
     public Point intercept(Line other) {
         // vypočtení průsečíku s přímkou

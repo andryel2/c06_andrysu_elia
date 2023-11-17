@@ -86,10 +86,10 @@ public class PolygonRasterizer {
         Point p2 = new Point(p3.x, p1.y);
         Point p4 = new Point(p1.x,p3.y);
 
-        filledLineRasterizer.rasterizePolygon(new Line(p1,p2,color));
+       filledLineRasterizer.rasterizePolygon(new Line(p1,p2,color));
         filledLineRasterizer.rasterizePolygon(new Line(p2,p3,color));
-        filledLineRasterizer.rasterizePolygon(new Line(p3,p4,color));
-        filledLineRasterizer.rasterizePolygon(new Line(p1,p4,color));
+       filledLineRasterizer.rasterizePolygon(new Line(p3,p4,color));
+        filledLineRasterizer.rasterizePolygon(new Line(p4,p1,color));
 
         }
 

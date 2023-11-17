@@ -9,75 +9,91 @@ public class FilledLineRasterizer extends LineRasterizer {
        super(raster);
    }
     @Override
-    public void drawLine(Raster raster, double x1, double y1, double x2, double y2, int color) {
-        if (x2 < x1) {
-            double temp = x2;
-            x2 = x1;
-            x1 = temp;           //triviální algoritmus pro úsečku
-            // nevýhody algoritmu: požití sčítání a násobení, jiné pro jednotlivé kvadranty
-            //výhody: jednoduchost implemetace
-            // podminka pro fungování ve všech kvadrantech
+    public void drawLine(Raster raster, int x1, int y1, int x2, int y2, int color) {
+            if((Math.abs(y2-y1))<(Math.abs(x2-x1))) {
+                if (x2 < x1){
+                    int temp = x1;
+                    x1 = x2;
+                    x2 = temp;
 
+                    temp = y1;
+                    y1 = y2;
+                    y2 = temp;
 
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
+                    draw(raster, x1,x2,y1,y2,color,0);  //osa 0 je x
 
-            drawLine(raster, x1, y1, x2, y2, color);
-
-        }
-            double k = (y2 - y1) / (x2 - x1);
-            double q = y1 - k * x1;
-            if(k < 1){
-                double y;
-                for (int x = (int) Math.round(x1); x < x2; x++) {
-                    y = (k * x + q);
-
-                    raster.setColor(x, (int) y, color);
                 }
-            }else if (k>1){
-                double x;
-                for(int y = (int) Math.round(y1); y < y2; y++){
-                    x = (y-q)/k;
-                    raster.setColor((int)x,y,color);
+            } else{
+                if(y2<y1){
+                        int temp = x1;
+                        x1 = x2;
+                        x2 = temp;
+
+                        temp = y1;
+                        y1 = y2;
+                        y2 = temp;
+
+                        draw(raster, x1,x2,y1,y2,color,1);  //osa 1 je y
                 }
+
             }
 
-          //  drawLine(raster, x1, y1, x2, y2, color);
-        /*else{
 
 
 
-                if (y2 < y1) {
-                double temp = x2;
-            x2 = x1;
-            x2 = x1;
-            x1 = temp;           //triviální algoritmus pro úsečku
-            // nevýhody algoritmu: požití sčítání a násobení, jiné pro jednotlivé kvadranty
-            //výhody: jednoduchost implemetace
-            // podminka pro fungování ve všech kvadrantech
 
 
-            temp = y1;
-            y1 = y2;
-            y2 = temp;
+    }
 
-            double k = (y2 - y1) / (x2 - x1);
-            double q = y1 - k * x1;
-            if (k < 0) {
-                double y;
-                for (int x = (int) Math.round(x1); x < x2; x++) {
-                    y = (k * x + q);
+    public void draw(Raster raster,int x1,int y1, int x2, int y2, int color, int osa){
+        int x = x1;
+        int y = y1;
+        int dy = y2 - y1;
+        int dx = x2 - x1;
+        int p = (2 * dy) - dx;
+        int d = (2 * dx) - dy;
+        int yi = 1;
+        int xi = 1;
 
-                    raster.setColor(x, (int) y, color);
+        if(osa == 0) {
+
+            raster.setColor(x, y, color);
+
+            if (dy < 0) {
+                 yi = -1;
+                 dy = -dy;
+             }
+
+            while (x < x2) {
+                 x = x + 1;
+                if (p < 0) {
+                     p = p + 2 * dy;
+                } else {
+                 p = p + ( 2* (dy - dx));
+                 y = y + yi;
+                 }
+                raster.setColor(x, y, color);
+            }
+        } else{
+                if (dx < 0) {
+                    xi = -1;
+                    dx = -dx;
                 }
-            } else {
-                double x;
-                for (int y = (int) Math.round(y1); y < y2; y++) {
-                    x = (y - q) / k;
-                    raster.setColor((int) x, y, color);
+
+                raster.setColor(x, y, color);
+
+                while (y < y2) {
+                    y = y + 1;
+                    if (d < 0) {
+                        d = d + 2 * dx;
+                    } else {
+                        d = d + (2 * (dx - dy));
+                        x = x + xi;
+                    }
+                    raster.setColor(x, y, color);
                 }
-            }*/
+
+        }
 
 
     }

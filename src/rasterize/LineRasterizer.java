@@ -12,7 +12,7 @@ public abstract class LineRasterizer {
         this.raster = raster;
     }
 
-    public abstract void drawLine(Raster raster, double x1, double y1, double x2, double y2, int color);
+    public abstract void drawLine(Raster raster, int x1, int y1, int x2, int y2, int color);
 
     public void rasterizePolygon(Line line){
         drawLine(raster, line.getX1(), line.getY1(), line.getX2(), line.getY2(), line.getColor());
