@@ -12,46 +12,61 @@ public class DottedLineRasterizer extends LineRasterizer{
 
     @Override
         public void drawLine(Raster raster, int x1, int y1, int x2, int y2, int color) {
+        {
+            int dx = x2 - x1;
+            int dy = y2 -y1;
 
-            int pocitadlo = 0;  //Pro mezery jsem využil počitadlo, které mně řekne,
-                                // které pixely zobrazím jako background
-            if (x2 < x1) {
-                int temp = x2;
-                x2 = x1;
-                x1 = temp;
+            if(x2 == x1){ //vertical
+                dy = Math.abs(dy);
+                int y = Math.max(y1,y2);
 
-                temp = y1;
-                y1 = y2;
-                y2 = temp;
+                while(dy > 0){
+                    raster.setPixel(x1,y--, color);
+                    --dy;
+                }
+            }
+            else if(y2 == y1){ //horizontal
 
-                drawLine(raster, x1, y1, x2, y2, color);
-            } else {
-                double k = (y2 - y1) / (x2 - x1);
-                double q = y1 - k * x1;
-                double y;
-                for (int x = (int) Math.round(x1); x < x2; x++) {
-                    y = (k * x + q);
+                dx = Math.abs(dx);
+                int x = Math.max(x1,x2);
 
+                while(dx > 0){
 
-                        if((0 == (x % 10))){   //Když x je celodělitelné 10 tak tento a dalších 7
-                                                // pixelú mají barvu jako backround
-                            raster.setPixel(x, (int) y,0x000000);
-                            pocitadlo = 7;
-                        }
+                    raster.setPixel(x--,y1, color);
+                    --dx;
+                }
 
+            }else {
+                //steep and shallow
+                float m = dy / dx;
+                float b = y1 - m* x1;
+                if(Math.abs(m) > 1.0f){ //steep
+                    dy = Math.abs(dy);
+                    int y = Math.max(y1,y2);
 
-                        if(pocitadlo!=0){
-                            raster.setPixel(x, (int) y,0x000000);
-                            pocitadlo--;
-                         }
-                        else{
+                    while (dy > 0){
+                        int x = (int) ((y -b)/ m);
 
-                            raster.setPixel(x, (int) y,color);
-                        }
+                        raster.setPixel(x,y--,color);
+                        --dy;
+                    }
+
+                }
+                else{ //shalow
+                    dx = Math.abs(dx);
+                    int x = Math.max(x1,x2);
+
+                    while(dx> 0){
+                        int y = (int) (m * x + b);
+
+                        raster.setPixel(x--,y,color);
+                        --dx;
+                    }
 
                 }
             }
 
 
         }
+    }
     }

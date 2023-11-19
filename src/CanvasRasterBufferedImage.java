@@ -145,38 +145,40 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 
 			public void mousePressed(MouseEvent e) {
 				if (e.isShiftDown()) {
-					//TODO
+
 				} else if (SwingUtilities.isLeftMouseButton(e)) {
 					x1 = e.getX();
 					y1 = e.getY();
+					raster.setPixel(50,50,0x66FF99);
 					panel.repaint();
 				} else if (SwingUtilities.isMiddleMouseButton(e)) {
 					polygon.clear();
 					Point p1 = new Point(e.getX(),e.getY());
 					polygon.add(p1);
 					panel.repaint();
-				} else if (SwingUtilities.isRightMouseButton(e)) {
-					if(polygon.size() == 0){
+				} else if (SwingUtilities.isRightMouseButton(e)){
+					clear(0xaaaaaa);
 						p1 = new Point(e.getX(),e.getY());
-						polygon.add(p1);}
+						polygon.add(p1);
 				}
 			}
 
-			/*public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				if(e.isControlDown()){
 					if (SwingUtilities.isLeftMouseButton(e)) {
-						seedFill4.fill(e.getX(),e.getY(),0x66FF99,0xaaaaaa,raster);
-						panel.repaint();
+
 					} else if (SwingUtilities.isRightMouseButton(e)) {
-						//TODO
+						seedFill4.fill(e.getX(),e.getY(),0x66FF99, 0xaaaaaa,
+								0xff0000,raster);
+						panel.repaint();
 					}
 				}
-			}*/
+			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e)){
-					p2 = new Point(e.getX(),e.getY());
+                	p2 = new Point(e.getX(),e.getY());
 					polygon.add(p2);
 					polygonRasterizer.rasterize(polygon);
 					panel.repaint();//tady musím celé překreslit
@@ -195,7 +197,6 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 			}
 		});
 
-
 		panel.addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -206,7 +207,7 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 					usecka.drawLine(raster,x1,y1,e.getX(),e.getY(),0xff0000);
 					panel.repaint();
 				} else if (SwingUtilities.isRightMouseButton(e)) {
-					clear(0xaaaaaa);
+                	clear(0xaaaaaa);
 
 					if(polygon.size()<2){
 						useckaTeckovana.drawLine(raster, p1.x, p1.y, e.getX(),e.getY(),0xff0000);
@@ -219,7 +220,7 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 						panel.repaint();
 
 					}
-					//panel.repaint();
+					panel.repaint();
 				} else if (SwingUtilities.isMiddleMouseButton(e)) {
 					clear(0xaaaaaa);
 					Point p3 = new Point(e.getX(),e.getY());
@@ -244,8 +245,6 @@ public class CanvasRasterBufferedImage {   //jenom jednu aplikačni třidu, vyji
 	}
 
 	// man vše v kontruktoru, možná dat do samotné metody init, kterou potom zavolam v konstruktoru pro přehlednost
-
-
 	public void clear(int color) {
 		raster.setClearColor(color);
 		raster.clear();

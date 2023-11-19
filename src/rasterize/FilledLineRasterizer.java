@@ -10,93 +10,87 @@ public class FilledLineRasterizer extends LineRasterizer {
    }
     @Override
     public void drawLine(Raster raster, int x1, int y1, int x2, int y2, int color) {
-            if((Math.abs(y2-y1))<(Math.abs(x2-x1))) {
-                if (x2 < x1){
-                    int temp = x1;
-                    x1 = x2;
-                    x2 = temp;
+        int dx = x2 - x1;
+        int dy = y2 -y1;
+
+        if(x2 == x1){ //vertical
+            dy = Math.abs(dy);
+            int y = Math.max(y1,y2);
+
+            while(dy > 0){
+                raster.setPixel(x1,y--, color);
+                --dy;
+            }
+        }
+        else if(y2 == y1){ //horizontal
+
+            dx = Math.abs(dx);
+            int x = Math.max(x1,x2);
+
+            while(dx > 0){
+
+                raster.setPixel(x--,y1, color);
+                --dx;
+            }
+
+        }else {
+              /*  if (x2 < x1) {
+                    int temp = x2;
+                    x2 = x1;
+                    x1 = temp;           //triviální algoritmus pro úsečku
+                    // nevýhody algoritmu: požití sčítání a násobení, jiné pro jednotlivé kvadranty
+                    //výhody: jednoduchost implemetace
+                    // podminka pro fungování ve všech kvadrantech
+
 
                     temp = y1;
                     y1 = y2;
                     y2 = temp;
 
-                    draw(raster, x1,x2,y1,y2,color,0);  //osa 0 je x
-
-                }
-            } else{
-                if(y2<y1){
-                        int temp = x1;
-                        x1 = x2;
-                        x2 = temp;
-
-                        temp = y1;
-                        y1 = y2;
-                        y2 = temp;
-
-                        draw(raster, x1,x2,y1,y2,color,1);  //osa 1 je y
-                }
-
-            }
-
-
-
-
-
-
-    }
-
-    public void draw(Raster raster,int x1,int y1, int x2, int y2, int color, int osa){
-        int x = x1;
-        int y = y1;
-        int dy = y2 - y1;
-        int dx = x2 - x1;
-        int p = (2 * dy) - dx;
-        int d = (2 * dx) - dy;
-        int yi = 1;
-        int xi = 1;
-
-        if(osa == 0) {
-
-            raster.setColor(x, y, color);
-
-            if (dy < 0) {
-                 yi = -1;
-                 dy = -dy;
-             }
-
-            while (x < x2) {
-                 x = x + 1;
-                if (p < 0) {
-                     p = p + 2 * dy;
+                    drawLine(raster, x1, y1, x2, y2, color);
                 } else {
-                 p = p + ( 2* (dy - dx));
-                 y = y + yi;
-                 }
-                raster.setColor(x, y, color);
-            }
-        } else{
-                if (dx < 0) {
-                    xi = -1;
-                    dx = -dx;
-                }
+                    double k = (y2 - y1) / (x2 - x1);
+                    double q = y1 - k * x1;
+                    double y;
+                    for (int x = (int) Math.round(x1); x < x2; x++) {
+                        y = (k * x + q);
 
-                raster.setColor(x, y, color);
-
-                while (y < y2) {
-                    y = y + 1;
-                    if (d < 0) {
-                        d = d + 2 * dx;
-                    } else {
-                        d = d + (2 * (dx - dy));
-                        x = x + xi;
+                        raster.setPixel(x,(int) y, color);
                     }
-                    raster.setColor(x, y, color);
+                }*/
+
+            //steep and shallow
+            float m = dy / dx;
+            float b = y1 - m* x1;
+            if(Math.abs(m) > 1.0f){ //steep
+                dy = Math.abs(dy);
+                int y = Math.max(y1,y2);
+
+                while (dy > 0){
+                    int x = (int) ((y -b)/ m);
+
+                    raster.setPixel(x,y--,color);
+                    --dy;
                 }
 
+            }
+            else{ //shalow
+               dx = Math.abs(dx);
+               int x = Math.max(x1,x2);
+
+               while(dx> 0){
+                   int y = (int) (m * x + b);
+
+                   raster.setPixel(x--,y,color);
+                   --dx;
+               }
+
+            }
         }
 
 
     }
+
 
 
 }

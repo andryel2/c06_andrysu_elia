@@ -37,7 +37,7 @@ public class PolygonRasterizer {
 
             }
 
-            if(polygon.size() >= 4) {
+            if(polygon.size() >= 3) {
                 Point pE = polygon.get(polygon.size() - 1);
                 Point pF = polygon.get(0);
 
@@ -53,13 +53,13 @@ public class PolygonRasterizer {
                 return;
             }
 
-            if(polygon.size() <= 3){
+            if(polygon.size() == 3){
 
                // int A = polygon.size()-2;
-                int B = polygon.size()-1;
+              //  int B = polygon.size()-1;
 
                 Point pA = polygon.get(0);
-                Point pB = polygon.get(B);
+                Point pB = polygon.get(1);
                 Point pC = new Point(x2,y2);
 
                 dottedLineRasterizer.rasterizePolygon(new Line(pA, pC, 0xff0000));

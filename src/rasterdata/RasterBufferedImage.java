@@ -35,13 +35,11 @@ public class RasterBufferedImage implements Raster {
         return Optional.empty();
     }
 
-    public void setColor(int c, int r, int color){
-        if(c< img.getWidth() && r< img.getHeight() && c>=0 && r>=0) {
+    public void setColor(int color, int c, int r) {
+        if (c < img.getWidth() && r < img.getHeight() && c >= 0 && r >= 0) {
             img.setRGB(c, r, color);
-        } //dodelat vyjimku
+        } //nechce fungovat, na cviceni boolean
     }
-
-
 
     public Graphics getGraphics(){
         return img.getGraphics();
