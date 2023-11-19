@@ -64,28 +64,39 @@ public class Line {
       return line;
     }
 
-    public boolean hasYIntercept(double y){ //musim přes předpis úsečky
+    public boolean hasYIntercept(double y){
         if(y>= y1 && y< y2 ){
             return true;
         }
         return false;
     }
-  /*  public double yIntercept(double y) { //musim přes předpis úsečky
+   public double yIntercept(double y) { //musim přes předpis úsečky
         double xIntercept = 0;
         double k = (y2 - y1) / (x2 - x1);
         double q = y1 - k * x1;
         for (int c = (int) x1; c < x2; c++) {
             int r = (int) (k * c + q);
             if (r == y) {
-                xIntercept = c;   //pouzit while cyklus stene budu hledat pouze jeden průsečík
+                xIntercept = c;
                 return xIntercept;
             }
         }
-    }  */  //metody pro ořezávání
+        return -1;  //vraceni hodnoty, kterou x mít nemůže, bude se dále kontrolovat
+    }    //metody pro ořezávání
 
     public Point intercept(Line other) {
-        // vypočtení průsečíku s přímkou
-        return null;
+        int x0;
+        int y0;
+        int x3 = other.getX1();
+        int y3 = other.getY1();
+        int x4 = other.getX2();
+        int y4 = other.getY2();
+        x0 = ((x1*y1 - x2*y1)*(x3 - x4) - (x3*y4 - x4*y3)*(x1 - x2)) /
+                ((x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4));
+        y0 = ((x1*y2 - x2*y1)*(y3 - y4) - (x3*y4 - x4*y3)*(y1 - y2)) /
+                ((x1 - x2)*(y3 - y4) - (y1 - y2)*(x3 - x4));
+        Point p0 = new Point(x0,y0);
+        return p0;
     }
 
     public boolean isInside(Point p) {   //vektory jako point, protože je tak muzeme reprezentovat
